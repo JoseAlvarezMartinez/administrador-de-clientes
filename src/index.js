@@ -1,13 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Layout from "./components/Layout"
+import Index from "./pages/Index"
+import NuevoCliente,{action as NuevoClienteAction} from './pages/NuevoCliente';
+import {loader as clientesLoader} from "./pages/Index"
 
+const router = createBrowserRouter([
+  {
+    path:"/",
+    element:<Layout/>,
+    children:[
+      {
+        index:true,
+        element:<Index/>,
+        loader:clientesLoader
+      },
+      {
+        path:"/clientes/nuevo",
+        element:<NuevoCliente/>,
+        action:NuevoClienteAction
+      }
+    ]
+  }
+])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router}/>
   </React.StrictMode>
 );
 
