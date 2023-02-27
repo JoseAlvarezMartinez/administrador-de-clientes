@@ -15,12 +15,9 @@ export async function action({ request }) {
   if (Object.values(datos).includes("")) {
     errores.push("Todos los campos son obligatorios");
   }
-  if (errores) {
-    console.log(errores)
+  if (Object.values(errores)) {
     return errores;
   }
-
-
   return datos;
 }
 const NuevoCliente = () => {
@@ -41,7 +38,10 @@ const NuevoCliente = () => {
         </button>
       </div>
       <div className="bg-white shadow rounded-md md:w-3/4 mx-auto px-5 py-10">
-        {errores?.length && errores.map((errorInfo,index) => <Error key={index}>{errorInfo}</Error>)}
+        {errores?.length ?
+          errores.map((errorInfo, index) => (
+            <Error key={index}>{errorInfo}</Error>
+          )) : null}
         <Form method="post" noValidate>
           <Formulario />
           <input
