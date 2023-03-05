@@ -1,9 +1,12 @@
-import { useNavigate, Form, useActionData } from "react-router-dom";
+import { useNavigate, Form, useActionData, redirect } from "react-router-dom";
 import Error from "../components/Error";
 import Formulario from "../components/Formulario";
+import { agregarCliente } from "../data/Clientes";
+
 export async function action({ request }) {
   const formData = await request.formData();
   const datos = Object.fromEntries(formData);
+
   const errores = [];
   const email = formData.get("email");
   let regex = new RegExp(
@@ -15,10 +18,11 @@ export async function action({ request }) {
   if (Object.values(datos).includes("")) {
     errores.push("Todos los campos son obligatorios");
   }
-  if (Object.values(errores)) {
+  if (Object.values(errores).length > 0) {
     return errores;
   }
-  return datos;
+  await agregarCliente(datos)
+  return redirect("/")
 }
 const NuevoCliente = () => {
   const navigate = useNavigate();
@@ -38,10 +42,11 @@ const NuevoCliente = () => {
         </button>
       </div>
       <div className="bg-white shadow rounded-md md:w-3/4 mx-auto px-5 py-10">
-        {errores?.length ?
-          errores.map((errorInfo, index) => (
-            <Error key={index}>{errorInfo}</Error>
-          )) : null}
+        {errores?.length
+          ? errores.map((errorInfo, index) => (
+              <Error key={index}>{errorInfo}</Error>
+            ))
+          : null}
         <Form method="post" noValidate>
           <Formulario />
           <input
