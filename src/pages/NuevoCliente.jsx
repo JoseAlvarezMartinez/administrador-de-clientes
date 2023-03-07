@@ -21,8 +21,8 @@ export async function action({ request }) {
   if (Object.values(errores).length > 0) {
     return errores;
   }
-  await agregarCliente(datos)
-  return redirect("/")
+  await agregarCliente(datos);
+  return redirect("/");
 }
 const NuevoCliente = () => {
   const navigate = useNavigate();
